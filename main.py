@@ -1,6 +1,7 @@
 import sys
 import pygame
 from settings import SCREEN_SIZE, BLACK
+from board import Board
 
 
 class Game:
@@ -12,6 +13,8 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
         self.clock = pygame.time.Clock()
 
+        self.board = Board()
+
     def handle_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -22,6 +25,8 @@ class Game:
         while True:
             self.screen.fill(BLACK)
             self.handle_event()
+
+            self.board.draw(self.screen)
 
             pygame.display.update()
             self.clock.tick(self.FPS)
