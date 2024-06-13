@@ -14,12 +14,14 @@ BOARD_POSITION = int(SCREEN_SIZE // 2 - BOARD_SIZE[0] // 2), int(
     SCREEN_SIZE // 2 - BOARD_SIZE[0] // 2
 )
 CELL_SIZE = BOARD_SIZE[0] // NUM_CELLS
+BOARDER_SIZE = 5
 
 """
 COLORS
 """
 WHITE = (255, 255, 255, 255)
 BLACK = (0, 0, 0, 255)
+RED = (255, 0, 0, 255)
 
 
 def update_alpha(color: tuple[int], alpha: int):
