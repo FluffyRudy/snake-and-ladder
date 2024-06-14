@@ -30,6 +30,11 @@ RED = (255, 0, 0, 255)
 
 "PAWNS"
 MAX_PAWNS = 4
+PAWN_SIZE = CELL_SIZE - 10
+
+"DICE"
+DICE_SPEED_DECREASE_FACTOR = 0.98
+DICE_ANIMATION_SPEED = 0.1
 
 
 def update_alpha(color: tuple[int], alpha: int):
