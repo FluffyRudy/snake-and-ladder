@@ -36,6 +36,25 @@ PAWN_SIZE = CELL_SIZE - 10
 DICE_SPEED_DECREASE_FACTOR = 0.98
 DICE_ANIMATION_SPEED = 0.1
 
+"SNAKE"
+SNAKE_COORS = (
+    (BOARD_POSITION[0] + CELL_SIZE * 2, BOARD_POSITION[1]),
+    (
+        BOARD_POSITION[0] + CELL_SIZE * 2,
+        BOARD_POSITION[1] + CELL_SIZE * 4,
+    ),
+    (
+        BOARD_POSITION[0] + CELL_SIZE * 5,
+        BOARD_POSITION[1] + CELL_SIZE * 3,
+    ),
+)
+SNAKE_SCALES = ((1, 1), (1, 1), (0.15, 0.15))
+PAWN_DOWN_LEN = (
+    (2, 2),
+    (5, 5),
+    (0, 3),
+)
+
 
 def update_alpha(color: tuple[int], alpha: int):
     return (*color[:3], alpha)

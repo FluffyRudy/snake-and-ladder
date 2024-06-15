@@ -63,3 +63,23 @@ class Pawn(Sprite):
             else:
                 self.rect.x = new_dist
                 time.sleep(0.1)
+
+    def calculate_future_position(self, steps: int):
+        new_x = self.rect.x
+        new_y = self.rect.y
+        direction = self.direction
+
+        for _ in range(steps):
+            new_dist = new_x + direction * CELL_SIZE
+            if new_dist > (BOARD_POSITION[0] + BOARD_SIZE[0]):
+                new_y -= CELL_SIZE
+                new_x = new_x - CELL_SIZE
+                direction = -1
+            elif new_dist < BOARD_POSITION[0]:
+                new_y -= CELL_SIZE
+                new_x = new_x + CELL_SIZE
+                direction = 1
+            else:
+                new_x = new_dist
+
+        return new_x, new_y
