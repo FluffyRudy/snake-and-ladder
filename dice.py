@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 import math
-from random import choice
+from random import randrange
 from path_util import join, iterate_files, GRAPHICS_DIRECTORY
 from settings import (
     BOARD_POSITION,
@@ -13,9 +13,15 @@ from settings import (
 
 class Dice:
     def __init__(self):
+        self.value = None
+
         self.frames = [
             pygame.image.load(file)
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice_rotation"))
+        ]
+        self.dice_outputs = [
+            pygame.transform.scale_by(pygame.image.load(file), (0.7, 0.7))
+            for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice"))
         ]
 
         self.image = self.frames[0]
@@ -29,16 +35,15 @@ class Dice:
         self.is_selected = False
 
         self.direction = Vector2(0, 0)
-
         self.boundry = pygame.display.get_surface()
 
     def draw(self, display_surface: pygame.Surface):
-        self.get_input()
-        if self.do_roll:
-            self.animate()
         display_surface.blit(self.image, (self.rect.topleft))
-        pygame.draw.rect(display_surface, "red", self.rect, 2, 5)
+
+    def update(self):
+        self.get_input()
         self.roll_movements()
+        self.animate()
 
     def get_input(self):
         pos = pygame.mouse.get_pos()
@@ -63,6 +68,8 @@ class Dice:
         self.direction.y = dir_[1] * dist * 0.1
 
     def animate(self):
+        if not self.do_roll:
+            return
         current_time = pygame.time.get_ticks()
         if current_time - self.roll_timer >= self.roll_delay:
             self.roll_timer = current_time
@@ -72,6 +79,10 @@ class Dice:
             self.frame_index = 0
 
     def stop_rolling(self):
+        if self.do_roll:
+            new_value = randrange(0, len(self.dice_outputs))
+            self.set_value(new_value + 1)
+            self.image = self.dice_outputs[new_value]
         self.do_roll = False
         self.direction *= 0
 
@@ -109,3 +120,14 @@ class Dice:
             self.rect.top - target_pos[1]
         ) / (distance + 1)
         return (distance, direction)
+
+    def set_value(self, value: int):
+        self.value = value
+
+    def get_rolled_value(self):
+        value = self.value
+        self.value = None
+        return value
+
+    def is_idel(self):
+        return self.direction.x == 0 and self.direction.y == 0

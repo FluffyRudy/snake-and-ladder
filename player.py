@@ -1,3 +1,4 @@
+from typing import Optional
 from settings import MAX_PAWNS, CELL_SIZE
 import pygame
 from pygame.sprite import Group
@@ -16,9 +17,44 @@ class Player:
             )
             for i in range(MAX_PAWNS)
         ]
+        self.active_pawn = None
+
+        self.rolled_value: int = 0
+        self.move_made = False
+        self.key_released = True
 
     def draw(self, display_surface: pygame.Surface):
         self.group.draw(display_surface)
 
-    def update(self):
-        pass
+    def update(self, value: int):
+        if self.rolled_value == 0 and value is not None:
+            self.rolled_value = value
+            self.move_made = True
+        pos = pygame.mouse.get_pos()
+
+        if (
+            pygame.mouse.get_pressed()[0]
+            and self.key_released
+            and not self.rolled_value is None
+        ):
+            for idx, pawn in enumerate(self.pawns):
+                if pawn.rect.collidepoint(pos):
+                    self.active_pawn = pawn
+                    self.key_released = False
+
+        if self.rolled_value > 0 and isinstance(self.active_pawn, Pawn):
+            self.active_pawn.move()
+        elif not self.active_pawn is None and self.rolled_value <= 0:
+            self.halt_pawn()
+
+        if self.rolled_value > 0 and not (self.active_pawn is None):
+            self.rolled_value -= 1
+
+        if not pygame.mouse.get_pressed()[0]:
+            self.key_released = True
+        return self.rolled_value == 0 and self.move_made
+
+    def halt_pawn(self):
+        self.active_pawn = None
+        self.rolled_value = 0
+        self.is_turn = False

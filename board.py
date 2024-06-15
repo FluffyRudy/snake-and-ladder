@@ -72,3 +72,6 @@ class Board:
         if x == NUM_CELLS - 1 and y == NUM_CELLS - 1:
             radius["br"] = BOARDER_RADIUS
         return radius
+
+    def get_cell_index_by(self, pos: tuple[int, int]):
+        pass
