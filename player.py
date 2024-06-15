@@ -21,7 +21,6 @@ class Player:
 
         self.rolled_value: int = 0
         self.move_made = False
-        self.will_collide = False
         self.key_released = True
 
     def draw(self, display_surface: pygame.Surface):
@@ -49,10 +48,6 @@ class Player:
                 self.rolled_value
             )
             future_rect = pygame.Rect(future_x, future_y, CELL_SIZE, CELL_SIZE)
-            for snake in snake_group:
-                if future_rect.colliderect(snake.collide_rect):
-                    print("dont move")
-                    break
             self.active_pawn.move()
         elif not self.active_pawn is None and self.rolled_value <= 0:
             self.halt_pawn()
