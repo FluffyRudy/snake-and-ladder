@@ -8,6 +8,7 @@ from settings import (
     update_alpha,
 )
 import time
+from random import randrange
 import pygame
 from pygame.sprite import Group
 from board import Board
@@ -19,11 +20,12 @@ from snake import Snake
 
 class Manager:
     is_mouse_released = True
+    MIN_SNAKE_DISTANCE = 2 * CELL_SIZE
 
     def __init__(self, main_surface: pygame.Surface):
         self.main_surface = main_surface
         self.board = Board()
-        self.bg_image = pygame.Surface((BOARD_SIZE), pygame.SRCALPHA)
+        self.bg_image = pygame.Surface(BOARD_SIZE, pygame.SRCALPHA)
         self.bg_image.fill(update_alpha(BLACK, 150))
 
         offset_0 = BOARD_POSITION[0] // 2, BOARD_POSITION[1] + 4 * PAWN_SIZE
@@ -36,14 +38,10 @@ class Manager:
         self.turn = 0
 
         self.snake_group = Group()
-        Snake(
-            (BOARD_POSITION[0] + CELL_SIZE * 2, BOARD_POSITION[1]),
-            self.snake_group,
-        )
-        # Snake((BOARD_POSITION[0] + CELL_SIZE * 2, BOARD_POSITION[1]), self.snake_group)
+        for _ in range(5):
+            self.place_snake()
 
         self.dice = Dice()
-
         self.finish_movement = True
 
         self.test_collide_rect = pygame.Rect(
@@ -55,7 +53,6 @@ class Manager:
 
     def run(self):
         self.update()
-
         self.main_surface.blit(self.bg_image, BOARD_POSITION)
         self.board.draw_grid(self.main_surface)
         self.draw()
@@ -118,5 +115,23 @@ class Manager:
     def switch_turn(self):
         self.turn = (self.turn + 1) % self.num_players
 
-    def allow_dice_movement(self):
-        pass
+    def place_snake(self):
+        max_x = BOARD_POSITION[0] + BOARD_SIZE[0] - CELL_SIZE
+        max_y = BOARD_POSITION[1] + BOARD_SIZE[1] - CELL_SIZE
+        while True:
+            random_pos = (
+                randrange(BOARD_POSITION[0], max_x, CELL_SIZE),
+                randrange(BOARD_POSITION[1], max_y, CELL_SIZE),
+            )
+            if self.is_valid_snake_position(random_pos):
+                break
+        Snake(random_pos, self.snake_group)
+
+    def is_valid_snake_position(self, pos):
+        for snake in self.snake_group:
+            distance = (
+                (snake.rect.x - pos[0]) ** 2 + (snake.rect.y - pos[1]) ** 2
+            ) ** 0.5
+            if distance < self.MIN_SNAKE_DISTANCE:
+                return False
+        return True
