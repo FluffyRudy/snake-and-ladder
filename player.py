@@ -16,9 +16,16 @@ class Player:
             )
             for i in range(MAX_PAWNS)
         ]
+        self.active_pawn = None
 
     def draw(self, display_surface: pygame.Surface):
         self.group.draw(display_surface)
 
-    def update(self):
+    def move_pawn(value: int):
         pass
+
+    def set_active_pawn(self, pawn: Pawn):
+        self.active_pawn = pawn
+
+    def get_active_pawn(self):
+        return self.active_pawn

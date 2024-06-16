@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 import math
-from random import choice
+from random import randrange
 from path_util import join, iterate_files, GRAPHICS_DIRECTORY
 from settings import (
     BOARD_POSITION,
@@ -13,6 +13,8 @@ from settings import (
 
 class Dice:
     def __init__(self):
+        self.rolled_value = 0
+
         self.frames = [
             pygame.image.load(file)
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice_rotation"))
@@ -74,6 +76,8 @@ class Dice:
     def stop_rolling(self):
         self.do_roll = False
         self.direction *= 0
+        self.set_roll_value(randrange(1, 7))
+        print(self.get_rolled_value())
 
     def roll_movements(self):
         self.rect.x += self.direction.x * -1
@@ -81,7 +85,8 @@ class Dice:
 
         if self.direction.length() > 1:
             self.direction *= DICE_SPEED_DECREASE_FACTOR
-        else:
+
+        if self.do_roll and self.direction.length() < 1:
             self.stop_rolling()
 
         self.check_boundaries()
@@ -109,3 +114,9 @@ class Dice:
             self.rect.top - target_pos[1]
         ) / (distance + 1)
         return (distance, direction)
+
+    def get_rolled_value(self):
+        return self.rolled_value
+
+    def set_roll_value(self, value: int):
+        self.rolled_value = value
