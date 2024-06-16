@@ -41,11 +41,7 @@ class Manager:
         self.snake_group = Group()
         for _ in range(3):
             self.place_snake()
-
-        Snake(
-            (BOARD_POSITION[0] + CELL_SIZE, BOARD_POSITION[1] + CELL_SIZE * 6),
-            self.snake_group,
-        )
+        self.sort_snakes()
 
         self.dice = Dice()
         self.finish_movement = True
@@ -139,3 +135,9 @@ class Manager:
             if pawn.rect.colliderect(snake.head_rect):
                 return snake.throw_pawns_coor
         return None
+
+    def sort_snakes(self):
+        sorted_snakes = sorted(self.snake_group, key=lambda snake: snake.rect.y)
+        self.snake_group.empty()
+        for snake in sorted_snakes:
+            self.snake_group.add(snake)
