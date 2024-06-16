@@ -17,7 +17,7 @@ from board import Board
 from player import Player
 from pawn import PawnType
 from dice import Dice
-from snake import Snake
+import time
 
 
 class Manager:
@@ -94,8 +94,12 @@ class Manager:
         ):
             self.get_active_pawn().move()
             if self.get_active_pawn().has_movement_end():
-                self.finish_movement = True
-                self.switch_turn()
+                if self.get_active_pawn().rect.colliderect(self.test_collide_rect):
+                    self.get_active_pawn().set_cmove(-3, -3)
+                    time.sleep(0.2)
+                else:
+                    self.finish_movement = True
+                    self.switch_turn()
 
     def current_player(self) -> Player:
         return self.players[self.turn]

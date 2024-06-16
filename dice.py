@@ -13,7 +13,7 @@ from settings import (
 
 class Dice:
     def __init__(self):
-        self.value = None
+        self.rolled_value = 0
 
         self.frames = [
             pygame.image.load(file)
@@ -85,6 +85,8 @@ class Dice:
             self.image = self.dice_outputs[new_value]
         self.do_roll = False
         self.direction *= 0
+        self.set_roll_value(randrange(1, 7))
+        print(self.get_rolled_value())
 
     def roll_movements(self):
         self.rect.x += self.direction.x * -1
@@ -92,7 +94,8 @@ class Dice:
 
         if self.direction.length() > 1:
             self.direction *= DICE_SPEED_DECREASE_FACTOR
-        else:
+
+        if self.do_roll and self.direction.length() < 1:
             self.stop_rolling()
 
         self.check_boundaries()
@@ -121,13 +124,8 @@ class Dice:
         ) / (distance + 1)
         return (distance, direction)
 
-    def set_value(self, value: int):
-        self.value = value
-
     def get_rolled_value(self):
-        value = self.value
-        self.value = None
-        return value
+        return self.rolled_value
 
-    def is_idel(self):
-        return self.direction.x == 0 and self.direction.y == 0
+    def set_roll_value(self, value: int):
+        self.rolled_value = value
