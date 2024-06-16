@@ -51,9 +51,15 @@ class Snake(Sprite):
             if color_pos != (0, 0):
                 break
 
+        y = self.rect.top + (color_pos[1] // CELL_SIZE) * CELL_SIZE
+
+        adjusted_y = (
+            BOARD_POSITION[1] + ((y - BOARD_POSITION[1]) // CELL_SIZE) * CELL_SIZE
+        )
+
         return pygame.Rect(
             self.rect.left + (color_pos[0] // CELL_SIZE) * CELL_SIZE,
-            self.rect.top + (color_pos[1] // CELL_SIZE) * CELL_SIZE,
+            adjusted_y,
             CELL_SIZE,
             CELL_SIZE,
         )
