@@ -21,6 +21,8 @@ from snake import Snake
 
 
 class Manager:
+    is_mouse_released = True
+
     def __init__(self, main_surface: pygame.Surface):
         self.main_surface = main_surface
         self.board = Board()
@@ -35,24 +37,20 @@ class Manager:
         ]
         self.num_players = len(self.players)
         self.turn = 0
-
         self.dice = Dice()
 
-        # snakes
-        self.snake_group = pygame.sprite.Group()
-        snake_images = iterate_files(join(GRAPHICS_DIRECTORY, "snake"))[:3]
+        self.finish_movement = True
 
-        for index, path in enumerate(snake_images):
-            Snake(
-                SNAKE_COORS[index][:3],
-                path,
-                self.snake_group,
-                PAWN_DOWN_LEN[index],
-                SNAKE_SCALES[index],
-            )
+        self.test_collide_rect = pygame.Rect(
+            BOARD_POSITION[0] + CELL_SIZE * 5,
+            BOARD_POSITION[1] + BOARD_SIZE[1] - CELL_SIZE,
+            CELL_SIZE,
+            CELL_SIZE,
+        )
 
     def run(self):
         self.update()
+
         self.main_surface.blit(self.bg_image, BOARD_POSITION)
         self.board.draw_grid(self.main_surface)
         self.draw()
@@ -63,27 +61,53 @@ class Manager:
             player.draw(self.main_surface)
         self.snake_group.draw(self.main_surface)
         self.dice.draw(self.main_surface)
-        for snake in self.snake_group:
-            pygame.draw.rect(self.main_surface, "red", snake.collide_rect, 2)
+        pygame.draw.rect(self.main_surface, "red", self.test_collide_rect, 2)
 
     def update(self):
-        if self.players[self.turn].rolled_value == 0:
-            self.dice.update()
-        value = self.dice.get_rolled_value()
-        done_roll = self.players[self.turn].update(value, self.snake_group)
-        if done_roll:
-            self.players[self.turn].move_made = False
-            self.turn = (self.turn + 1) % self.num_players
-        pygame.draw.rect(
-            self.main_surface, "red", (BOARD_POSITION, (CELL_SIZE, CELL_SIZE)), 5, 5
-        )
+        self.handle_event()
+        self.player_movement()
 
-    def highlight_active_pawns(self):
-        for pawn in self.players[self.turn].pawns:
-            pygame.draw.circle(
-                self.main_surface, "white", pawn.rect.center, PAWN_SIZE // 2 + 5, 5
-            )
+    def handle_event(self):
+        mouse_pos = pygame.mouse.get_pos()
 
-    def check_collision(self, value: Optional[int]):
-        if value is None:
-            return False
+        if (
+            pygame.mouse.get_pressed()[0]
+            and self.finish_movement
+            and self.dice.get_rolled_value() != 0
+        ):
+            for pawn in self.current_player().pawns:
+                if pawn.rect.collidepoint(mouse_pos) and self.is_mouse_released:
+                    self.is_mouse_released = False
+                    self.finish_movement = False
+                    self.current_player().set_active_pawn(pawn)
+                    self.get_active_pawn().set_roll_value(self.dice.get_rolled_value())
+                    self.dice.set_roll_value(0)
+                    break
+
+        if not pygame.mouse.get_pressed()[0]:
+            self.is_mouse_released = True
+
+    def player_movement(self):
+        if (
+            not self.finish_movement
+            and not self.players[self.turn].get_active_pawn() is None
+        ):
+            self.get_active_pawn().move()
+            if self.get_active_pawn().has_movement_end():
+                self.finish_movement = True
+                self.switch_turn()
+
+    def current_player(self) -> Player:
+        return self.players[self.turn]
+
+    def get_active_pawn(self):
+        return self.current_player().get_active_pawn()
+
+    def custom_movement(self, x, y):
+        pass
+
+    def switch_turn(self):
+        self.turn = (self.turn + 1) % self.num_players
+
+    def allow_dice_movement(self):
+        pass
