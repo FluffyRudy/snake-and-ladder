@@ -7,12 +7,14 @@ from settings import (
     PAWN_SIZE,
     update_alpha,
 )
+import time
 import pygame
+from pygame.sprite import Group
 from board import Board
 from player import Player
 from pawn import PawnType
 from dice import Dice
-import time
+from snake import Snake
 
 
 class Manager:
@@ -32,6 +34,14 @@ class Manager:
         ]
         self.num_players = len(self.players)
         self.turn = 0
+
+        self.snake_group = Group()
+        Snake(
+            (BOARD_POSITION[0] + CELL_SIZE * 2, BOARD_POSITION[1]),
+            self.snake_group,
+        )
+        # Snake((BOARD_POSITION[0] + CELL_SIZE * 2, BOARD_POSITION[1]), self.snake_group)
+
         self.dice = Dice()
 
         self.finish_movement = True
@@ -53,6 +63,8 @@ class Manager:
     def draw(self):
         for player in self.players:
             player.draw(self.main_surface)
+        self.snake_group.draw(self.main_surface)
+        self.snake_group.update(self.main_surface)
         self.dice.draw(self.main_surface)
         pygame.draw.rect(self.main_surface, "red", self.test_collide_rect, 2)
 

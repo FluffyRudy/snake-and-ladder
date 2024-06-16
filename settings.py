@@ -1,6 +1,7 @@
 import os
 import pygame
 from random import randint as rint
+from path_util import join, iterate_files, GRAPHICS_DIRECTORY
 
 PROJECT_DIR = os.path.dirname(__file__)
 
@@ -35,6 +36,10 @@ PAWN_SIZE = CELL_SIZE - 10
 "DICE"
 DICE_SPEED_DECREASE_FACTOR = 0.98
 DICE_ANIMATION_SPEED = 0.1
+
+"SNAKE"
+snake = join(GRAPHICS_DIRECTORY, "snake")
+SNAKES = iterate_files(snake)
 
 
 def update_alpha(color: tuple[int], alpha: int):
