@@ -7,13 +7,14 @@ from settings import (
     PAWN_SIZE,
     update_alpha,
 )
+from typing import Optional
 import time
 from random import randrange
 import pygame
 from pygame.sprite import Group
 from board import Board
 from player import Player
-from pawn import PawnType
+from pawn import Pawn, PawnType
 from dice import Dice
 from snake import Snake
 
@@ -96,9 +97,12 @@ class Manager:
         ):
             self.get_active_pawn().move()
             if self.get_active_pawn().has_movement_end():
-                if self.get_active_pawn().rect.colliderect(self.test_collide_rect):
+                # if self.get_active_pawn().rect.colliderect(self.test_collide_rect):
+                #     self.get_active_pawn().set_cmove(-3, -3)
+                #     time.sleep(0.2)
+                collision_rect = self.pawn_snake_collision(self.get_active_pawn())
+                if collision_rect:
                     self.get_active_pawn().set_cmove(-3, -3)
-                    time.sleep(0.2)
                 else:
                     self.finish_movement = True
                     self.switch_turn()
@@ -127,7 +131,7 @@ class Manager:
                 break
         Snake(random_pos, self.snake_group)
 
-    def is_valid_snake_position(self, pos):
+    def is_valid_snake_position(self, pos: tuple[int, int]):
         for snake in self.snake_group:
             distance = (
                 (snake.rect.x - pos[0]) ** 2 + (snake.rect.y - pos[1]) ** 2
@@ -135,3 +139,9 @@ class Manager:
             if distance < self.MIN_SNAKE_DISTANCE:
                 return False
         return True
+
+    def pawn_snake_collision(self, pawn: Pawn) -> Optional[pygame.Rect]:
+        for snake in self.snake_group:
+            if pawn.rect.colliderect(snake.head_rect):
+                return snake.tail_rect
+        return None
