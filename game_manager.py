@@ -42,18 +42,16 @@ class Manager:
         self.turn = 0
 
         self.snake_group = Group()
-        for _ in range(5):
+        for _ in range(3):
             self.place_snake()
+
+        Snake(
+            (BOARD_POSITION[0] + CELL_SIZE, BOARD_POSITION[1] + CELL_SIZE * 6),
+            self.snake_group,
+        )
 
         self.dice = Dice()
         self.finish_movement = True
-
-        self.test_collide_rect = pygame.Rect(
-            BOARD_POSITION[0] + CELL_SIZE * 5,
-            BOARD_POSITION[1] + BOARD_SIZE[1] - CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE,
-        )
 
     def run(self):
         self.update()
@@ -68,7 +66,6 @@ class Manager:
         self.snake_group.draw(self.main_surface)
         self.snake_group.update(self.main_surface)
         self.dice.draw(self.main_surface)
-        pygame.draw.rect(self.main_surface, "red", self.test_collide_rect, 2)
 
     def update(self):
         self.handle_event()
@@ -101,12 +98,9 @@ class Manager:
         ):
             self.get_active_pawn().move()
             if self.get_active_pawn().has_movement_end():
-                # if self.get_active_pawn().rect.colliderect(self.test_collide_rect):
-                #     self.get_active_pawn().set_cmove(-3, -3)
-                #     time.sleep(0.2)
-                collision_rect = self.pawn_snake_collision(self.get_active_pawn())
-                if collision_rect:
-                    self.get_active_pawn().set_cmove(-3, -3)
+                collision_cmove = self.pawn_snake_collision(self.get_active_pawn())
+                if collision_cmove is not None:
+                    self.get_active_pawn().set_cmove(*collision_cmove)
                 else:
                     self.finish_movement = True
                     self.switch_turn()
@@ -144,8 +138,8 @@ class Manager:
                 return False
         return True
 
-    def pawn_snake_collision(self, pawn: Pawn) -> Optional[pygame.Rect]:
+    def pawn_snake_collision(self, pawn: Pawn) -> Optional[tuple[int, int]]:
         for snake in self.snake_group:
             if pawn.rect.colliderect(snake.head_rect):
-                return snake.tail_rect
+                return snake.throw_pawns_coor
         return None
