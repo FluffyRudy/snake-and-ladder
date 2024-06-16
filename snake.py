@@ -1,4 +1,5 @@
 import pygame
+from pygame.math import Vector2
 from pygame.sprite import Sprite, Group
 from random import randrange
 from settings import SNAKES, CELL_SIZE, BOARD_POSITION, BOARD_SIZE
@@ -35,6 +36,11 @@ class Snake(Sprite):
         self.rect = self.image.get_rect(topleft=(posx_clipped, posy_clipped))
         self.head_rect = self.get_head_point()
         self.tail_rect = self.get_tail_point()
+        self.throw_pawns_coor = (
+            Vector2(self.tail_rect.topleft) - Vector2(self.head_rect.topleft)
+        ) // CELL_SIZE
+        self.throw_pawns_coor.x = int(self.throw_pawns_coor.x)
+        self.throw_pawns_coor.y = int(self.throw_pawns_coor.y)
 
     def get_head_point(self):
         """
