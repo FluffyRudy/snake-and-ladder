@@ -78,8 +78,6 @@ class Manager:
         """
         self.highlight_current_player()
         self.snake_group.draw(self.main_surface)
-        self.snake_group.update(self.main_surface)
-        self.ladder_group.update(self.main_surface)
         self.ladder_group.draw(self.main_surface)
         for player in self.players:
             player.draw(self.main_surface)
@@ -271,3 +269,6 @@ class Manager:
                 PAWN_SIZE // 1.8,
                 5,
             )
+
+    def get_winner(self) -> Optional[int]:
+        return self.winner

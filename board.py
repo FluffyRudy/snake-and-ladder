@@ -11,12 +11,14 @@ from settings import (
     random_rgb_color,
     normalized_color,
 )
+from path_util import join, get_path
 import pygame
 
 
 class Board:
     def __init__(self):
-        self.font = pygame.font.Font("fonts/Topaz8-xxO8.ttf", 25)
+        font_path = get_path("fonts", "Topaz8-xxO8.ttf")
+        self.font = pygame.font.Font(font_path, 25)
 
     def draw_grid(self, surface: pygame.Surface):
         count = 100

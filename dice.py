@@ -47,7 +47,6 @@ class Dice:
 
     def draw(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, (self.rect.topleft))
-        pygame.draw.rect(display_surface, "red", self.rect, 2, 5)
 
     def get_input(self):
         pos = pygame.mouse.get_pos()
