@@ -15,7 +15,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.bg_image = pygame.transform.scale(
-            pygame.image.load(join(GRAPHICS_DIRECTORY, "bg.jpg")).convert_alpha(),
+            pygame.image.load(join(GRAPHICS_DIRECTORY, "bg.png")).convert_alpha(),
             self.screen.get_size(),
         )
         self.game_manager = Manager(self.screen)
@@ -27,8 +27,8 @@ class Game:
                 sys.exit()
 
     def run(self):
+        self.screen.blit(self.bg_image, (0, 0))
         while True:
-            self.screen.blit(self.bg_image, (0, 0))
             self.handle_event()
 
             self.game_manager.run()
