@@ -24,10 +24,14 @@ class Pawn(Sprite):
     ):
         super().__init__(groups)
 
-        self.image = pygame.image.load(Pawn.get_pawn(type_))
+        self.image = pygame.transform.scale(
+            pygame.image.load(Pawn.get_pawn(type_)), (PAWN_SIZE, PAWN_SIZE)
+        )
         self.rect = self.image.get_rect(topleft=pos)
         self.type_ = type_
         self.roll_value = 0
+        """remain same when even roll_vlaue decrease but will be reset after dice rolling"""
+        self.cnst_roll_value = self.roll_value
         self.c_move = Vector2(0, 0)
         self.onboard = False
         self.direction = 1
@@ -93,3 +97,13 @@ class Pawn(Sprite):
 
     def set_roll_value(self, value: int):
         self.roll_value = value
+        self.cnst_roll_value = value
+
+    def reverse_direction(self):
+        self.direction = self.direction * -1
+
+    def reset_cnst_roll_value(self):
+        self.cnst_roll_value = 0
+
+    def get_cnst_roll_value(self):
+        return self.cnst_roll_value
