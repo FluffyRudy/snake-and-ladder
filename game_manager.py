@@ -71,6 +71,7 @@ class Manager:
         self.dice.draw(self.main_surface)
 
     def update(self):
+        self.dice.update()
         self.handle_event()
         self.player_movement()
 

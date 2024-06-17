@@ -6,7 +6,7 @@ from pawn import PawnType, Pawn
 
 
 class Player:
-    def __init__(self, pawn_type: PawnType, offset: tuple[int, int]):
+    def __init__(self, pawn_type: PawnType, offset: tuple[float, float]):
         self.group = Group()
 
         self.pawns = [

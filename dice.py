@@ -81,12 +81,12 @@ class Dice:
     def stop_rolling(self):
         if self.do_roll:
             new_value = randrange(0, len(self.dice_outputs))
-            self.set_value(new_value + 1)
+            self.set_roll_value(new_value + 1)
+            print(self.get_rolled_value())
             self.image = self.dice_outputs[new_value]
         self.do_roll = False
         self.direction *= 0
         self.set_roll_value(randrange(1, 7))
-        print(self.get_rolled_value())
 
     def roll_movements(self):
         self.rect.x += self.direction.x * -1

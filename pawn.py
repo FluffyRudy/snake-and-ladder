@@ -86,7 +86,6 @@ class Pawn(Sprite):
             elif self.c_move.y < 0:
                 self.rect.y -= CELL_SIZE
                 self.c_move.y += 1
-        print(self.c_move)
         time.sleep(0.1)
 
     def set_cmove(self, x: int, y: int):
