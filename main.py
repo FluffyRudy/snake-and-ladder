@@ -27,8 +27,8 @@ class Game:
                 sys.exit()
 
     def run(self):
-        self.screen.blit(self.bg_image, (0, 0))
         while True:
+            self.screen.blit(self.bg_image, (0, 0))
             self.handle_event()
 
             self.game_manager.run()

@@ -76,6 +76,7 @@ class Manager:
         """
         Draw all game elements onto the main surface.
         """
+        self.highlight_current_player()
         self.snake_group.draw(self.main_surface)
         self.snake_group.update(self.main_surface)
         self.ladder_group.update(self.main_surface)
@@ -260,3 +261,13 @@ class Manager:
             if player.recent_rect.colliderect(self.win_rect):
                 print(self.turn, "won")
                 self.winner = self.turn
+
+    def highlight_current_player(self):
+        for pawn in self.current_player().pawns:
+            pygame.draw.circle(
+                self.main_surface,
+                "white",
+                (pawn.rect.left + PAWN_SIZE // 2, pawn.rect.top + PAWN_SIZE // 2),
+                PAWN_SIZE // 1.8,
+                5,
+            )
