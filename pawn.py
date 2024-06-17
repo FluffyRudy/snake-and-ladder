@@ -66,6 +66,7 @@ class Pawn(Sprite):
     def move(self) -> None:
         """
         Move the pawn based on its roll value or custom move vector.
+        Note that movement will be externally handled
         """
         if self.roll_value != 0:
             if not self.onboard:
