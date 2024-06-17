@@ -20,11 +20,7 @@ class Dice:
             pygame.image.load(file)
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice_rotation"))
         ]
-<<<<<<< HEAD
-        self.dice_outputs = [
-=======
         self.dices = [
->>>>>>> reattach
             pygame.transform.scale_by(pygame.image.load(file), (0.7, 0.7))
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice"))
         ]
@@ -40,17 +36,9 @@ class Dice:
         self.is_selected = False
 
         self.direction = Vector2(0, 0)
+
         self.boundry = pygame.display.get_surface()
 
-<<<<<<< HEAD
-    def draw(self, display_surface: pygame.Surface):
-        display_surface.blit(self.image, (self.rect.topleft))
-
-    def update(self):
-        self.get_input()
-        self.roll_movements()
-        self.animate()
-=======
     def update(self):
         self.get_input()
         if self.do_roll:
@@ -60,7 +48,6 @@ class Dice:
     def draw(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, (self.rect.topleft))
         pygame.draw.rect(display_surface, "red", self.rect, 2, 5)
->>>>>>> reattach
 
     def get_input(self):
         pos = pygame.mouse.get_pos()
@@ -85,8 +72,6 @@ class Dice:
         self.direction.y = dir_[1] * dist * 0.1
 
     def animate(self):
-        if not self.do_roll:
-            return
         current_time = pygame.time.get_ticks()
         if current_time - self.roll_timer >= self.roll_delay:
             self.roll_timer = current_time
@@ -96,21 +81,12 @@ class Dice:
             self.frame_index = 0
 
     def stop_rolling(self):
-        if self.do_roll:
-            new_value = randrange(0, len(self.dice_outputs))
-            self.set_roll_value(new_value + 1)
-            print(self.get_rolled_value())
-            self.image = self.dice_outputs[new_value]
         self.do_roll = False
         self.direction *= 0
-<<<<<<< HEAD
-        self.set_roll_value(randrange(1, 7))
-=======
         """ randrange: Exclusive, randint: Inclusive """
         value = randrange(1, 7)
         self.image = self.dices[value - 1]
         self.set_roll_value(value)
->>>>>>> reattach
 
     def roll_movements(self):
         self.rect.x += self.direction.x * -1
