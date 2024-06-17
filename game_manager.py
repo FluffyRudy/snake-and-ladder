@@ -71,6 +71,8 @@ class Manager:
         self.dice.draw(self.main_surface)
 
     def update(self):
+        if self.dice.get_rolled_value() == 0:
+            self.dice.update()
         self.handle_event()
         self.player_movement()
 
@@ -122,9 +124,6 @@ class Manager:
 
     def get_active_pawn(self):
         return self.current_player().get_active_pawn()
-
-    def custom_movement(self, x, y):
-        pass
 
     def switch_turn(self):
         self.get_active_pawn().reset_cnst_roll_value()

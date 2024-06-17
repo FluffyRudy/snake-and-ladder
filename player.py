@@ -21,9 +21,6 @@ class Player:
     def draw(self, display_surface: pygame.Surface):
         self.group.draw(display_surface)
 
-    def move_pawn(value: int):
-        pass
-
     def set_active_pawn(self, pawn: Pawn):
         self.active_pawn = pawn
 
