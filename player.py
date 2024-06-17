@@ -1,4 +1,3 @@
-from typing import Optional
 from settings import MAX_PAWNS, CELL_SIZE
 import pygame
 from pygame.sprite import Group
@@ -6,7 +5,7 @@ from pawn import PawnType, Pawn
 
 
 class Player:
-    def __init__(self, pawn_type: PawnType, offset: tuple[float, float]):
+    def __init__(self, pawn_type: PawnType, offset: tuple[int, int]):
         self.group = Group()
 
         self.pawns = [
@@ -21,9 +20,6 @@ class Player:
 
     def draw(self, display_surface: pygame.Surface):
         self.group.draw(display_surface)
-
-    def move_pawn(value: int):
-        pass
 
     def set_active_pawn(self, pawn: Pawn):
         self.active_pawn = pawn

@@ -36,9 +36,6 @@ class Pawn(Sprite):
         self.onboard = False
         self.direction = 1
 
-        self.onboard = False
-        self.direction = 1
-
     @classmethod
     def get_pawn(self, type_: PawnType) -> str:
         base_dir = join(GRAPHICS_DIRECTORY, "pawn")

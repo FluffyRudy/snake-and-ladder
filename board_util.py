@@ -39,12 +39,6 @@ def get_tail_point(image: pygame.Surface, rect: pygame.Rect):
 def convert_coordinate(coordinates: tuple[int, int], size: tuple[int, int]):
     offset_x, offset_y = BOARD_POSITION
     width, height = BOARD_SIZE
-    print(
-        (
-            offset_x + coordinates[0] * CELL_SIZE,
-            offset_y + height + coordinates[1] * CELL_SIZE,
-        )
-    )
     return (
         offset_x + coordinates[0] * CELL_SIZE,
         offset_y + height + coordinates[1] * CELL_SIZE - size[1],

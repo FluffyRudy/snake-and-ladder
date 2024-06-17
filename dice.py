@@ -8,6 +8,7 @@ from settings import (
     BOARD_SIZE,
     DICE_ANIMATION_SPEED,
     DICE_SPEED_DECREASE_FACTOR,
+    CELL_SIZE,
 )
 
 
@@ -19,7 +20,11 @@ class Dice:
             pygame.image.load(file)
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice_rotation"))
         ]
+<<<<<<< HEAD
         self.dice_outputs = [
+=======
+        self.dices = [
+>>>>>>> reattach
             pygame.transform.scale_by(pygame.image.load(file), (0.7, 0.7))
             for file in iterate_files(join(GRAPHICS_DIRECTORY, "dice"))
         ]
@@ -37,6 +42,7 @@ class Dice:
         self.direction = Vector2(0, 0)
         self.boundry = pygame.display.get_surface()
 
+<<<<<<< HEAD
     def draw(self, display_surface: pygame.Surface):
         display_surface.blit(self.image, (self.rect.topleft))
 
@@ -44,6 +50,17 @@ class Dice:
         self.get_input()
         self.roll_movements()
         self.animate()
+=======
+    def update(self):
+        self.get_input()
+        if self.do_roll:
+            self.animate()
+        self.roll_movements()
+
+    def draw(self, display_surface: pygame.Surface):
+        display_surface.blit(self.image, (self.rect.topleft))
+        pygame.draw.rect(display_surface, "red", self.rect, 2, 5)
+>>>>>>> reattach
 
     def get_input(self):
         pos = pygame.mouse.get_pos()
@@ -86,7 +103,14 @@ class Dice:
             self.image = self.dice_outputs[new_value]
         self.do_roll = False
         self.direction *= 0
+<<<<<<< HEAD
         self.set_roll_value(randrange(1, 7))
+=======
+        """ randrange: Exclusive, randint: Inclusive """
+        value = randrange(1, 7)
+        self.image = self.dices[value - 1]
+        self.set_roll_value(value)
+>>>>>>> reattach
 
     def roll_movements(self):
         self.rect.x += self.direction.x * -1
@@ -102,14 +126,14 @@ class Dice:
 
     def check_boundaries(self):
         if (
-            self.rect.right >= BOARD_POSITION[0] + BOARD_SIZE[0]
-            or self.rect.left < BOARD_POSITION[0]
+            self.rect.right + CELL_SIZE >= BOARD_POSITION[0] + BOARD_SIZE[0]
+            or self.rect.left - CELL_SIZE < BOARD_POSITION[0]
         ):
             self.direction.x *= -1
 
         if (
-            self.rect.top <= BOARD_POSITION[1]
-            or self.rect.bottom >= BOARD_POSITION[1] + BOARD_SIZE[1]
+            self.rect.top <= BOARD_POSITION[1] + CELL_SIZE
+            or self.rect.bottom + CELL_SIZE >= BOARD_POSITION[1] + BOARD_SIZE[1]
         ):
             self.direction.y *= -1
 
