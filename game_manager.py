@@ -43,8 +43,8 @@ class Manager:
         offset_0 = BOARD_POSITION[0] // 2, BOARD_POSITION[1] + 4 * PAWN_SIZE
         offset_1 = BOARD_POSITION[0] * 1.2 + BOARD_SIZE[0], offset_0[1]
         self.players = [
-            Player(PawnType.RED, offset_0),
-            Player(PawnType.GREEN, offset_1),
+            Player(PawnType.RED, offset_0, 0),
+            Player(PawnType.GREEN, offset_1, 1),
         ]
         self.num_players = len(self.players)
         self.turn = 0
@@ -59,6 +59,9 @@ class Manager:
 
         self.dice = Dice()
         self.finish_movement = True
+
+        self.win_rect = pygame.Rect(BOARD_POSITION, (CELL_SIZE, CELL_SIZE))
+        self.winner: Optional[self.turn] = None
 
     def run(self) -> None:
         """
@@ -85,6 +88,9 @@ class Manager:
         """
         Update the game state, including dice and player movements.
         """
+        self.game_won()
+        if not self.winner is None:  # prevent game update
+            return None
         if self.dice.get_rolled_value() == 0 and self.finish_movement:
             self.dice.update()
         self.handle_event()
@@ -243,3 +249,14 @@ class Manager:
         Ladder((0, -2), self.ladder_group, LARGE_LADDER, scale_ratio=(1, 6.5))
         Ladder((5, -6), self.ladder_group, MID_LADDER, scale_ratio=(1, 2.5))
         Ladder((8.1, 0), self.ladder_group, SMALL_WHITE_LADDER, scale_ratio=(0.8, 3.5))
+
+    def game_won(self) -> None:
+        """
+        Check for winner
+        """
+        if not self.winner is None:
+            return None
+        for player in self.players:
+            if player.recent_rect.colliderect(self.win_rect):
+                print(self.turn, "won")
+                self.winner = self.turn
