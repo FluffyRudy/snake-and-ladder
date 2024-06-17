@@ -41,6 +41,13 @@ DICE_ANIMATION_SPEED = 0.1
 snake = join(GRAPHICS_DIRECTORY, "snake")
 SNAKES = iterate_files(snake)
 
+"LADDER"
+ladder = join(GRAPHICS_DIRECTORY, "ladder")
+SMALL_WHITE_LADDER: str = join(ladder, "ladder1.png")
+SMALL_BROWN_LADDER: str = join(ladder, "ladder2.png")
+MID_LADDER: str = join(ladder, "ladder3.png")
+LARGE_LADDER: str = join(ladder, "ladder4.png")
+
 
 def update_alpha(color: tuple[int], alpha: int):
     return (*color[:3], alpha)
